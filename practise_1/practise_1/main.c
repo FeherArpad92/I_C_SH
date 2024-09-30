@@ -10,6 +10,8 @@
 #define F_CPU 8000000UL
 #include <avr/delay.h>
 
+#include <inttypes.h>
+
 /******************************************************************************
 * Macros
 ******************************************************************************/
@@ -23,8 +25,8 @@
 /******************************************************************************
 * Global Variables
 ******************************************************************************/
-
-
+uint8_t counter = 0; 
+uint8_t enable_counter = 0;
 /******************************************************************************
 * External Variables
 ******************************************************************************/
@@ -38,6 +40,17 @@
 /******************************************************************************
 * Local Function Definitions
 ******************************************************************************/
+void pin_direction_on_PORTA(int bit_position, int direction)
+{
+	if(direction)
+	{
+		DDRA = DDRA | (1<<bit_position);
+	}
+	else
+	{
+		DDRA = DDRA & (~(1<<bit_position));
+	}
+}
 
 /******************************************************************************
 * Function:         int main(void)
@@ -48,19 +61,58 @@
 ******************************************************************************/
 int main(void)
 {
-	DDRA = 0b11111111;
-	PORTA = 0xFF;
+	//excersises 1-5
+	//DDRA = 0b11111111;
+	//PORTA = 0xFF;
 	
-	DDRB = 0b01111110;
-	PORTB = 0xff;
+	//DDRB = 0b01111110;
+	//PORTB = 0xff;
+	
+	
+	//excersise 6.
+	DDRA = 0b11111111; // all pin set as output in PORTA
+	
+	DDRB = 0b11110000; // set high 4 bits to output, set low 4 bits to input
+	PORTB = 0b11111111; // set all pull-up resistors
+	
+	
 	/* Replace with your application code */
 	while(1)
 	{
-		if(PINB == 0b01111110)
-		{
-			PORTA = PORTA ^ 0xff;
-		}
 		_delay_ms(500);
+		if((PINB & 0b00000001) == 0)
+		{
+			enable_counter = 1;
+		}
+		
+		if((PINB & 0b00000010) == 0)
+		{
+			enable_counter = 0;
+		}
+		
+		if((PINB & 0b00000100) == 0)
+		{
+			counter = 0;
+		}
+		
+		//counter = counter +1;
+		if(enable_counter == 1)
+		{
+			counter++;
+		}
+		
+		
+		PORTA = counter;
+		
+		
+		
+		
+		////excersises 1-5
+		//if(PINB == 0b01111110)
+		//{
+		//	PORTA = PORTA ^ 0xff;
+		//}
+		//_delay_ms(500);
 		
 	}
 }
