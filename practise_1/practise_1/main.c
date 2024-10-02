@@ -111,11 +111,14 @@ int main(void)
 	//PORTB = 0b11111111; // set all pull-up resistors
 	
 	//excercise 7. 
-	set_pin_direction_on_PORTA(0,1);
-	set_voltage_level(0,1);
+	set_pin_direction_on_PORTA(1,1);
+	//set_voltage_level(0,1);
 	
 	set_pin_direction_on_PORTA(7,0);
 	set_pull_up_resisistor_on_PORTA(7,1);
+	
+	set_pin_direction_on_PORTA(4,0);
+	set_pull_up_resisistor_on_PORTA(4,1);
 	
 	
 	
@@ -124,16 +127,17 @@ int main(void)
 	/* Replace with your application code */
 	while(1)
 	{
-		int pa7_state;
+		int pa7_state, pa4_state;
 		pa7_state = get_voltage_level_from_PORTA(7);
+		pa4_state = get_voltage_level_from_PORTA(4);
 		
-		if(pa7_state)
+		if(pa7_state || pa4_state)
 		{
-			set_voltage_level(0,1);
+			set_voltage_level(1,1);
 		}
 		else
 		{
-			set_voltage_level(0,0);
+			set_voltage_level(1,0);
 		}
 		//_delay_ms(500);
 		//if((PINB & 0b00000001) == 0)
